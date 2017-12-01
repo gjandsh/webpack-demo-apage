@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import './style.css'
 import {Carousel} from './carousel.js';
 import {GoTop} from './goTop.js';
 import {LoadMore} from './loadmore.js';

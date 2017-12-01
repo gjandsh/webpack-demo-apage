@@ -10325,308 +10325,876 @@ return jQuery;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__style_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__carousel_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__goTop_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loadmore_js__ = __webpack_require__(9);
 
 
-var _jquery = __webpack_require__(0);
 
-var _jquery2 = _interopRequireDefault(_jquery);
 
-var _carousel = __webpack_require__(2);
 
-var _goTop = __webpack_require__(3);
-
-var _loadmore = __webpack_require__(4);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-new _carousel.Carousel((0, _jquery2.default)('.carousel'));
-(0, _jquery2.default)('#navbar').on('click', 'a', function (event) {
+new __WEBPACK_IMPORTED_MODULE_2__carousel_js__["a" /* Carousel */](__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.carousel'));
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#navbar').on('click', 'a', function (event) {
     event.preventDefault();
-    (0, _jquery2.default)('html, body').animate({
-        scrollTop: (0, _jquery2.default)(_jquery2.default.attr(this, 'href')).offset().top
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').animate({
+        scrollTop: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.attr(this, 'href')).offset().top
     }, 500);
-});
-new _goTop.GoTop((0, _jquery2.default)('body'));
-new _loadmore.LoadMore((0, _jquery2.default)('.portfolio-content-wrap'));
+})
+new __WEBPACK_IMPORTED_MODULE_3__goTop_js__["a" /* GoTop */](__WEBPACK_IMPORTED_MODULE_0_jquery___default()('body'))
+new __WEBPACK_IMPORTED_MODULE_4__loadmore_js__["a" /* LoadMore */](__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.portfolio-content-wrap'))
+
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
+// load the styles
+var content = __webpack_require__(3);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Carousel = Carousel;
-
-var _jquery = __webpack_require__(0);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Carousel($ct) {
-    this.$ct = $ct;
-    this.init();
-    this.bind();
-    this.autoPlay();
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(5)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js!./style.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
 }
-Carousel.prototype = {
-    init: function init() {
-        var $imgCt = this.$imgCt = this.$ct.find('.img-ct'),
-            $bullet = this.$bullet = this.$ct.find('.bullet');
-        var $first = this.$imgCt.find('li').first(),
-            $last = this.$imgCt.find('li').last();
-        var $width = this.$width = this.$ct.width();
-        this.pageIndex = 0;
-        this.imgCount = $imgCt.children().length;
-        $imgCt.prepend($last.clone());
-        $imgCt.append($first.clone());
-        $imgCt.width($width * (this.imgCount + 2));
-        // $imgCt.css('left', -$width)
-    },
-    bind: function bind() {
-        var _this = this;
-        this.$bullet.on('click', 'li', function () {
-            var length = (0, _jquery2.default)(this).index() - _this.pageIndex;
-            console.log((0, _jquery2.default)(this).index());
-            console.log(length);
-            _this.play(length);
-        });
-    },
-    play: function play(length) {
-        var _this = this;
-        this.length = length;
-        // var $width = this.$ct.width()
-        // this.$imgCt.width($width * (this.imgCount + 2))
-        this.check(this.length);
-        this.$imgCt.animate({
-            left: -(_this.pageIndex + length + 1) * _this.$width
-        }, function () {
-            _this.pageIndex += length;
-            if (_this.pageIndex === _this.imgCount) {
-                _this.pageIndex = 0;
-                _this.$imgCt.css({
-                    left: -_this.$width
-                });
-            } else if (_this.pageIndex < 0) {
-                _this.pageIndex = _this.imgCount - 1;
-                _this.$imgCt.css({
-                    left: -_this.imgCount * _this.$width
-                });
-            }
-            _this.setBullet();
-        });
-    },
-    setBullet: function setBullet() {
-        this.$bullet.children().removeClass('active').eq(this.pageIndex).addClass('active');
-    },
-    autoPlay: function autoPlay() {
-        var _this = this;
-        this.clock = setInterval(function () {
-            _this.play(1);
-        }, 2000);
-    },
-    check: function check(length) {
-        var _this = this;
-        (0, _jquery2.default)(window).resize(function () {
-            _this.$width = _this.$ct.width();
-            _this.$imgCt.width(_this.$width * (_this.imgCount + 2));
-            _this.$imgCt.css({
-                left: -(_this.pageIndex + length) * _this.$width
-            });
-        });
-    }
-};
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+exports = module.exports = __webpack_require__(4)(undefined);
+// imports
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.GoTop = GoTop;
+// module
+exports.push([module.i, "* {\r\n  box-sizing: border-box;\r\n}\r\nul,ol,li {\r\n  list-style: none;\r\n  padding: 0;\r\n  margin: 0;\r\n}\r\nbody{\r\n  padding: 0;\r\n  margin: 0;\r\n}\r\na {\r\n  text-decoration: none;\r\n}\r\n.layout{\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  text-align: center;\r\n}\r\n.go-top{\r\n  position:fixed;\r\n  right:5%;\r\n  bottom:5%;\r\n  width:50px;\r\n  height:50px;\r\n  line-height:50px;\r\n  background:rgba(0, 0, 0, 0.6);\r\n  color:white;\r\n  font-size:20px;\r\n  border:none;\r\n  outline:none;\r\n}\r\n/* carousel */\r\n.carousel{\r\n  color:#fff;\r\n  width: 98.67vw;\r\n  height: 1030vh;\r\n  position: relative;\r\n  margin: 30px auto;\r\n  overflow: hidden;   \r\n  box-shadow: 0 0 5px;\r\n  margin-top:0;\r\n  margin-right:0;\r\n}\r\n\r\n.img-ct {\r\n  position: absolute;\r\n  left:-98.67vw;\r\n  display:flex;\r\n  flex-wrap:nowrap;\r\n}\r\n\r\n.img-ct li {\r\n  width: 98.67vw;\r\n  height:1030px;\r\n}\r\n.img-ct li:nth-child(1){\r\n  background-image: url(https://i.loli.net/2017/11/29/5a1e768c11b19.jpg);\r\n  background-size: cover;\r\n}\r\n.img-ct li:nth-child(2){\r\n  background-image: url(https://i.loli.net/2017/11/29/5a1e7cbee9850.jpg);\r\n  background-size: cover;\r\n}\r\n.img-ct li:nth-child(3){\r\n  background-image: url(https://i.loli.net/2017/11/29/5a1e77ae821e1.jpg);\r\n  background-size: contain;\r\n}\r\n.img-ct li:nth-child(4){\r\n  background-image: url(https://i.loli.net/2017/11/29/5a1e76d2e14de.jpg);\r\n  background-size: cover;\r\n}\r\n.img-ct li:nth-child(5){\r\n  background-image: url(https://i.loli.net/2017/11/29/5a1e7700c9e57.jpg);\r\n  background-size: cover;\r\n}\r\n.img-ct li:nth-child(6){\r\n  background-image: url(https://i.loli.net/2017/11/29/5a1e768c11b19.jpg);\r\n  background-size: cover;\r\n}\r\n.img-ct li:nth-child(7){\r\n  background-image: url(https://i.loli.net/2017/11/29/5a1e7cbee9850.jpg);\r\n  background-size: cover;\r\n}\r\n@media(min-width:350px) {\r\n  .carousel {\r\n    height: 800px;\r\n  }\r\n  .img-ct {\r\n    height: 800px;\r\n  }\r\n}\r\n@media(min-width:482px) {\r\n  .carousel {\r\n    height: 750px;\r\n  }\r\n  .img-ct {\r\n    height: 750px;\r\n  }\r\n}\r\n@media(min-width:676px) {\r\n  .carousel {\r\n    height: 690px;\r\n  }\r\n  .img-ct {\r\n    height: 690px;\r\n  }\r\n}\r\n@media(min-width:718px) {\r\n  .carousel {\r\n    height: 640px;\r\n  }\r\n  .img-ct {\r\n    height: 640px;\r\n  }\r\n}\r\n@media(min-width:910px) {\r\n  .carousel {\r\n    height: 600px;\r\n  }\r\n  .img-ct {\r\n    height: 600px;\r\n  }\r\n\r\n}\r\n\r\n.bullet {\r\n  position: absolute;\r\n  bottom: 5%;\r\n  left: 50%;\r\n  transform: translateX(-50%);\r\n  display: flex;\r\n  z-index:2;\r\n}\r\n\r\n.bullet li {\r\n  padding: 3px 12px;\r\n  margin: 0 3px;\r\n  border-radius: 5px;\r\n  background-color: #ddd;\r\n}\r\n\r\n.bullet li:hover {\r\n  cursor: pointer;\r\n}\r\n\r\n\r\n.bullet .active {\r\n  background-color: rgba(0, 0, 0, 0.6);\r\n}\r\n/* navbar */\r\n#navbar{\r\n  position:absolute;\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items:center;\r\n  padding-top: 25px;\r\n  z-index:2;\r\n}\r\n#navbar ul {\r\n  display: flex;\r\n}\r\n#navbar span {\r\n  color: #fec503;\r\n  font-size: 2em;\r\n  padding:10px;\r\n}\r\n#navbar ul a {\r\n  color: #fff;\r\n  padding: 15px;\r\n  letter-spacing: 1px;\r\n  font-size: 14px;\r\n}\r\n#navbar ul a:hover {\r\n  color:#fec503;\r\n}\r\n@media(max-width: 768px) {\r\n  #navbar ul{\r\n  display: none;\r\n  }\r\n}\r\n@media(min-width: 768px) {\r\n  .container {\r\n  width: 750px;\r\n  }\r\n}\r\n@media(min-width:992px) {\r\n  .container {\r\n    width: 970px;\r\n  }\r\n}\r\n@media(min-width:1200px) {\r\n  .container {\r\n    width: 1170px;\r\n  }\r\n}\r\n.head-container{\r\n  position:absolute;\r\n  padding-top:150px;\r\n  padding-bottom:200px;\r\n  width:98.67vw;\r\n}\r\nheader h2 {\r\n  font-size: 40px;\r\n  font-style: italic;\r\n  margin-bottom: 25px;\r\n}\r\nheader h1 {\r\n  font-size: 75px;\r\n  margin-top: 0;\r\n}\r\n.morelink {\r\n  color: #fff;\r\n  padding: 20px 40px;\r\n  background-color: #fed136;\r\n  border:none;\r\n  border-radius: 3px;\r\n  font-size: 18px;\r\n  font-weight: 700;\r\n  outline:none;\r\n}\r\n.morelink:hover {\r\n  background-color: #fec503; \r\n}\r\n/* service */\r\n#service {\r\n  padding: 100px 0;\r\n}\r\n@media(min-width:768px){\r\n  #service {\r\n  padding: 150px 0;\r\n}\r\n}\r\n.service-lists li i{\r\n   font-size:112px; \r\n}\r\n.section-title {\r\n  margin:0;\r\n  padding:0;\r\n  font-size:40px;\r\n}\r\n.section-subtitle {\r\n  margin: 20px 0 75px 0;\r\n  font-size: 16px;\r\n  font-style: italic;\r\n  color: #777;\r\n}\r\n.service-lists {\r\n  margin:0 15px;\r\n}\r\n.service-lists ul {\r\n  margin:0 auto;\r\n}\r\n.service-lists ul>li{\r\n  display: block;\r\n  text-align:center;\r\n  padding: 0 15px;\r\n}\r\n@media(min-width:992px){\r\n  .service-lists ul>li {\r\n    float: left;\r\n    width:33.3333%;\r\n  }\r\n}\r\n.clearfix::after {\r\n  content:\" \";\r\n  display: block;\r\n  clear: both;\r\n}\r\n.service-lists h4 {\r\n  margin: 15px 0;\r\n} \r\n.service-lists p {\r\n  font-size: 14px;\r\n  color: #777;\r\n  line-height: 1.75;\r\n}\r\n/* portfolio */\r\n#portfolio {\r\n  background-color: #f7f7f7;\r\n  padding: 100px 0;\r\n}\r\n.portfolio-container {\r\n  margin:0 auto;\r\n  display: flex; \r\n  justify-content:center;\r\n  flex-wrap: wrap;\r\n}\r\n.portfolio-content-wrap{\r\n  padding-left: 15px;\r\n  padding-right: 15px;\r\n  width:80%;\r\n}\r\n.portfolio-content {\r\n  margin-bottom: 30px;\r\n  text-align: center;\r\n  background-color: #fff;\r\n  max-width: 100%;\r\n}\r\n.portfolio-link img{\r\n  width: 100%;\r\n}\r\n.portfolio-link>img{\r\n  max-height:400px;\r\n}\r\n.portfolio-link {\r\n  position: relative;\r\n  font-size: 0;\r\n}\r\n.portfolio-hover {\r\n  position: absolute;\r\n  background-color: #ddd;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  opacity: 0;\r\n  vertical-align: middle;\r\n}\r\n.portfolio-hover-content {\r\n  position: absolute;\r\n  top: 50%;\r\n  left: 50%;\r\n  transform: translate(-50%, -50%);\r\n}\r\n.portfolio-hover-content>i{\r\n  font-size:50px;\r\n}\r\n.portfolio-hover:hover {\r\n  opacity: 0.6;\r\n  transition: all ease .5s;\r\n}\r\n.portfolio-context {\r\n  padding:25px;\r\n}\r\n.portfolio-context h4{\r\n  margin: 0;\r\n  font-size: 18px;\r\n}\r\n.portfolio-context p{\r\n  margin: 0;\r\n  font-size: 16px;\r\n  color: #777;\r\n  font-style: italic;\r\n  line-height: 1.75;\r\n}\r\n@media(min-width: 992px) {\r\n  #portfolio{padding: 150px 0;}\r\n  .portfolio-content-wrap{\r\n    width:33.3333%;\r\n  }\r\n  .portfolio-link img {\r\n  width:100%;\r\n  max-height:260px;\r\n  }\r\n}\r\n.load-btn{\r\n  text-align: center;\r\n}\r\n.load-more,.get-back{\r\n  display:inline-block;\r\n  margin:20px 20px 0 0;\r\n}\r\n/* about */\r\n#about {\r\n  padding:100px 0;\r\n  margin: 0 auto;\r\n}\r\n.time-pannel h4 {\r\n  margin:0 0 10px 0;\r\n  font-size: 18px;\r\n  font-weight: 700;\r\n}\r\n.time-pannel p {\r\n  font-size: 14px;\r\n  line-height: 1.75;\r\n  color: #777;\r\n  font-family: \"Roboto Slab\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n}\r\n.timeline{\r\n  margin:0 15px; \r\n}\r\n.timenode{\r\n  position:relative;\r\n}\r\n.node-image img{\r\n  border-radius: 100%;\r\n  width: 80px;\r\n  height: 80px;\r\n  border: 7px solid #f1f1f1;\r\n  vertical-align: middle;\r\n}\r\n.time-pannel{\r\n  position: absolute;\r\n  top:0;\r\n  left:100px;\r\n} \r\n.timenode{\r\n    padding-bottom: 300px;\r\n  } \r\n.timenode::after {\r\n    content:\" \";\r\n    display: block;\r\n    position: absolute;\r\n    left: 40px;\r\n    border-left: 2px solid #f1f1f1;\r\n    padding-bottom: 300px;\r\n    margin-left: -1px;\r\n  }\r\n  .timenode:last-child::after{\r\n    top:0;\r\n    padding-bottom:0;\r\n  }\r\n@media(min-width:400px) {\r\n  .timenode{\r\n    padding-bottom: 200px;\r\n  } \r\n  .timenode::after{\r\n    padding-bottom: 200px;\r\n  }\r\n  .timenode:last-child{\r\n    padding-bottom: 0;\r\n  }\r\n}\r\n@media(min-width: 768px) {\r\n  #about{padding: 150px 0}\r\n  .timenode{\r\n    padding-bottom: 200px;\r\n  } \r\n  .timenode::after {\r\n    padding-bottom: 200px;\r\n    left: 50%;\r\n  }\r\n  .node-image {\r\n  text-align: center;\r\n  }\r\n  .timenode::after {\r\n    padding-bottom: 200px;\r\n  }\r\n  .timenode:last-child::after{\r\n    top:0;\r\n    padding-bottom:0;\r\n  }\r\n   .node-image img{\r\n      width: 100px;\r\n      height: 100px;\r\n  }\r\n  .time-pannel {\r\n    left: auto;\r\n    position: absolute;\r\n    top:0;\r\n    width:41%;\r\n    padding: 0 20px 20px 30px;\r\n  }\r\n  .timenode:nth-child(odd) .time-pannel {\r\n    right:50%;\r\n    margin-right:50px;\r\n    text-align: right;\r\n  }\r\n  .timenode:nth-child(even) .time-pannel {\r\n    left:50%;\r\n    margin-left:50px;\r\n    text-align:left;\r\n  }\r\n}\r\n@media(min-width: 992px) {\r\n  .timenode {\r\n    padding-bottom: 150px;\r\n  }\r\n  .timenode::after {\r\n    padding-bottom: 150px;\r\n  }\r\n  .time-pannel {\r\n    position: absolute;\r\n    top:0;\r\n    padding: 0 20px 20px 20px;\r\n    width: 385px;\r\n  }\r\n  .node-image img {\r\n    width: 150px;\r\n    height: 150px;\r\n  }\r\n  .timenode:nth-child(odd) .time-pannel {\r\n    right:50%;\r\n    margin-right:85px;\r\n    text-align: right;\r\n  }\r\n  .timenode:nth-child(even) .time-pannel {\r\n    left:50%;\r\n    margin-left:85px;\r\n    text-align:left;\r\n  }\r\n}\r\n@media(min-width: 1200px) {\r\n  .time-pannel {\r\n    width:auto;\r\n  } \r\n  .node-image img {\r\n    width:170px;\r\n    height: 170px;\r\n  }\r\n  .timenode {\r\n    padding-bottom: 100px;\r\n  }\r\n  .timenode::after {\r\n    padding-bottom: 100px;\r\n  }\r\n  .timenode:nth-child(odd) .time-pannel {\r\n    padding:0 20px 20px 100px;\r\n    right:50%;\r\n    margin-right:100px;\r\n    text-align: right;\r\n  }\r\n  .timenode:nth-child(even) .time-pannel {\r\n    padding:0 100px 20px 20px;\r\n    left:50%;\r\n    margin-left:100px;\r\n    text-align:left;\r\n  }\r\n}\r\n/* team */\r\n#team {\r\n  padding: 100px 0;\r\n  background-color: #f7f7f7;\r\n}\r\n.team-members {\r\n  margin-left:auto;\r\n  margin-right:auto;\r\n}\r\n.team-member {\r\n  text-align: center;\r\n  margin-bottom:50px;\r\n}\r\n.avatar img {\r\n  height:225px;\r\n  width:225px;\r\n  border: 7px solid #f1f1f1;\r\n  border-radius: 50%;\r\n}\r\n.personal-intro h4 {\r\n  margin: 25px 0 0 0;\r\n  font-size: 18px;\r\n  font-weight: 700;\r\n}\r\n.personal-intro p {\r\n  margin: 0 0 10px 0;\r\n  font-size: 14px;\r\n  line-height: 1.75em;\r\n  color: #777;\r\n}\r\n.social-media {\r\n  display: flex;\r\n  justify-content: center;\r\n}\r\n.social-media-link {\r\n  width: 40px;\r\n  height: 40px;\r\n  margin: 0 5px;\r\n  border-radius: 50%;\r\n}\r\n.social-media-link a{\r\n  color: black;\r\n}\r\n.social-media-link i{\r\n  font-size: 40px;\r\n}\r\n.social-media-link>a:hover{\r\n  color: #fec503;\r\n  transition: all ease .5s;\r\n}\r\n.summary {\r\n  font-size: 16px;\r\n  color: #777;\r\n}\r\n@media(min-width: 768px) {\r\n  #team {\r\n    padding:150px 0;\r\n  }\r\n  .team-members {\r\n    display: flex;\r\n    justify-content: space-around;\r\n  }\r\n  .summary {\r\n    width: 720px;\r\n  }\r\n}\r\n@media(min-width: 992px) {\r\n  .summary {\r\n    width: 940px;\r\n  } \r\n}\r\n@media(min-width: 1200px) {\r\n  .summary {\r\n    width: 750px;\r\n  } \r\n}\r\n/* contact */\r\n#contact{\r\n  padding-bottom: 85px;\r\n  background-image: url(http://os5kf123g.bkt.clouddn.com/post.jpg);\r\n  background-size: contain;\r\n  color: #fff;\r\n}\r\n#contact .section-subtitle{\r\n  color: #fff;\r\n}\r\n.form-control{\r\n  background-color: #ECCDDB;\r\n  opacity:0.6;\r\n}\r\n.contact-links img {\r\n  margin:50px auto;\r\n  width:200px;\r\n  height:50px;\r\n}\r\n@media(min-width: 768px) {\r\n  #contact{\r\n    padding-bottom:135px;\r\n  }\r\n  .contact-links ul {\r\n    display: flex;\r\n    justify-content: space-around;\r\n    flex-wrap: wrap;\r\n  }\r\n  .contact-links img {\r\n    margin:50px 72.5px;\r\n  }\r\n}\r\n@media(min-width: 992px) {\r\n  .contact-links img {\r\n    margin:50px 6px;\r\n  }\r\n}\r\n@media(min-width: 1200px) {\r\n  .contact-links img {\r\n    margin:50px 32px;\r\n  }\r\n}\r\n#contact-contents {\r\n  margin: 15px;\r\n}\r\n.input-msg{\r\n  height: 236px;\r\n  margin-bottom:25px;\r\n}\r\n@media(min-width:768px){\r\n  .personal-info, .input-msg{\r\n  width: 720px;\r\n  padding: 0 15px;\r\n }\r\n}\r\n@media(min-width:992px){\r\n  .personal-info, .input-msg{\r\n  width: 455px;\r\n  float: left;\r\n  padding: 0 15px;\r\n}\r\n .input-msg{\r\n   width:485px;\r\n }\r\n}\r\n@media(min-width:1200px){ \r\n  .personal-info, .input-msg{\r\n  width: 555px;\r\n  float: left;\r\n  padding: 0 15px;}\r\n .input-msg{\r\n   width:585px;}\r\n}\r\n.form-control {\r\n  width: 100%;\r\n  border: 1px solid #ccc;\r\n  border-radius: 4px;\r\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);\r\n  outline: none;\r\n  line-height: 20px;\r\n}\r\n.personal-info .form-control {\r\n  margin-bottom: 25px; \r\n  padding: 20px;\r\n}\r\n.form-control:focus {\r\n  opacity:1;\r\n  background-color: #fff;\r\n  border-color:#fec503;\r\n}\r\n.input-msg .form-control{\r\n  height:100%;\r\n  padding: 20px;\r\n}\r\n/* footer */\r\nfooter {\r\n  padding: 25px 0;\r\n  font-size: 14px;\r\n  line-height: 40px;\r\n}\r\n.copyright {\r\n  color: #333;\r\n}\r\n.quick-lines ul>li{\r\n  display: inline-block;\r\n}\r\n@media(min-width:992px){\r\n  footer{\r\n    display: flex;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n  }\r\n}\r\n.quick-lines a{\r\n  color: #fed136;\r\n  padding: 0 5px;\r\n}\r\n.quick-lines a:hover{\r\n  color: #fec503;\r\n  text-decoration: underline;\r\n}", ""]);
 
-var _jquery = __webpack_require__(0);
+// exports
 
-var _jquery2 = _interopRequireDefault(_jquery);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function GoTop($container) {
-    this.target = (0, _jquery2.default)('<button class="go-top">^</button>');
-    var btn = this.target;
-    this.ct = $container || (0, _jquery2.default)('body');
-    var ct = this.ct;
-    GoTop.prototype.bindEvent = function () {
-        btn.click(function () {
-            (0, _jquery2.default)('body,html').animate({
-                scrollTop: 0
-            }, 500);
-        });
-        (0, _jquery2.default)(window).scroll(function () {
-            if ((0, _jquery2.default)(window).scrollTop() > 100) {
-                btn.show();
-            } else {
-                btn.hide();
-            }
-        });
-    };
-    GoTop.prototype.creatNode = function () {
-        ct.append(btn);
-        btn.hide();
-    };
-    this.creatNode();
-    this.bindEvent();
-}
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
 
+var stylesInDom = {};
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
 });
-exports.LoadMore = LoadMore;
 
-var _jquery = __webpack_require__(0);
+var getElement = (function (fn) {
+	var memo = {};
 
-var _jquery2 = _interopRequireDefault(_jquery);
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			var styleTarget = fn.call(this, selector);
+			// Special case to return head of iframe instead of iframe itself
+			if (styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[selector] = styleTarget;
+		}
+		return memo[selector]
+	};
+})(function (target) {
+	return document.querySelector(target)
+});
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(6);
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton) options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	options.attrs.type = "text/css";
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = Carousel;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+function Carousel($ct) {
+        this.$ct = $ct;
+        this.init();
+        this.bind();
+        this.autoPlay();
+    }
+    Carousel.prototype = {
+        init: function () {
+            var $imgCt = this.$imgCt = this.$ct.find('.img-ct'),
+                $bullet = this.$bullet = this.$ct.find('.bullet');
+            var $first = this.$imgCt.find('li').first(),
+                $last = this.$imgCt.find('li').last();
+            var $width = this.$width = this.$ct.width()
+            this.pageIndex = 0;
+            this.imgCount = $imgCt.children().length
+            $imgCt.prepend($last.clone())
+            $imgCt.append($first.clone())
+            $imgCt.width($width * (this.imgCount + 2))
+            // $imgCt.css('left', -$width)
+        },
+        bind: function () {
+            var _this = this;
+            this.$bullet.on('click', 'li', function () {
+                var length = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).index() - _this.pageIndex
+                console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).index())
+                console.log(length)
+                _this.play(length)
+            })
+        },
+        play: function (length) {
+            var _this = this;
+            this.length = length;
+            // var $width = this.$ct.width()
+            // this.$imgCt.width($width * (this.imgCount + 2))
+            this.check(this.length);
+            this.$imgCt.animate({
+                left: -(_this.pageIndex + length + 1) * _this.$width
+            }, function () {
+                _this.pageIndex += length;
+                if (_this.pageIndex === _this.imgCount) {
+                    _this.pageIndex = 0;
+                    _this.$imgCt.css({
+                        left: -_this.$width
+                    })
+                } else if (_this.pageIndex < 0) {
+                    _this.pageIndex = _this.imgCount - 1;
+                    _this.$imgCt.css({
+                        left: -_this.imgCount * _this.$width
+                    })
+                }
+                _this.setBullet()
+            })
+        },
+        setBullet: function () {
+            this.$bullet.children().removeClass('active').eq(this.pageIndex).addClass('active')
+        },
+        autoPlay: function () {
+            var _this = this
+            this.clock = setInterval(function () { _this.play(1) }, 2000);
+        },
+        check: function (length) {
+            var _this = this
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(window).resize(function () {
+                _this.$width = _this.$ct.width()
+                _this.$imgCt.width(_this.$width * (_this.imgCount + 2));
+                _this.$imgCt.css({
+                    left: -(_this.pageIndex + length) * _this.$width
+                })
+            })
+        }
+    }
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = GoTop;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+function GoTop($container) {
+    this.target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<button class="go-top">^</button>');
+    var btn = this.target
+    this.ct = $container || __WEBPACK_IMPORTED_MODULE_0_jquery___default()('body');
+    var ct = this.ct
+    GoTop.prototype.bindEvent = function () {
+        btn.click(function () {
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('body,html').animate({
+                scrollTop: 0
+            }, 500)
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(window).scroll(function () {
+            if (__WEBPACK_IMPORTED_MODULE_0_jquery___default()(window).scrollTop() > 100) {
+                btn.show()
+            } else {
+                btn.hide()
+            }
+        })
+    }
+    GoTop.prototype.creatNode = function () {
+        ct.append(btn)
+        btn.hide()
+    }
+    this.creatNode()
+    this.bindEvent()
+}
+
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = LoadMore;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 
 function LoadMore($ct) {
-    this.$ct = $ct;
-    this.init();
-    this.bind();
-}
-LoadMore.prototype = {
-    init: function init() {
-        var _this = this;
-        this.page = 1;
-        this.isLoad = false;
-        var height1 = (0, _jquery2.default)('#column1').children().last().offset().top + (0, _jquery2.default)('#column1').children().last().height();
-        var height2 = (0, _jquery2.default)('#column2').children().last().offset().top + (0, _jquery2.default)('#column1').children().last().height();
-        var height3 = (0, _jquery2.default)('#column3').children().last().offset().top + (0, _jquery2.default)('#column1').children().last().height();
-        this.columnHeight = [height1, height2, height3];
-        (0, _jquery2.default)('.get-back').hide();
-    },
-    bind: function bind() {
-        var _this = this;
-        this.imgarr = [];
-        this.titlearr = [];
-        this.contentarr = [];
-        (0, _jquery2.default)('.load-more').one('click', function (e) {
-            e.preventDefault();
-            _this.isLoad = true;
-            (0, _jquery2.default)('.load-more a').text('Loading...');
-            _jquery2.default.get('./loadMore.json').done(function (res) {
-                for (var i = 0; i < res.url.length; i++) {
-                    _this.imgarr.push(res.url[i]);
-                    _this.titlearr.push(res.title[i]);
-                    _this.contentarr.push(res.content[i]);
-                }
-                _this.isLoad = false;
-                _this.getpages(_this.page);
-                (0, _jquery2.default)('.get-back').fadeIn(500);
-                (0, _jquery2.default)('.load-more').on('click', function (e) {
-                    e.preventDefault();
-                    (0, _jquery2.default)('.get-back').fadeIn(500);
-                    (0, _jquery2.default)('.load-more a').text('Loading...');
-                    _this.getpages(_this.page);
-                });
-                (0, _jquery2.default)('.get-back').on('click', function (e) {
-                    e.preventDefault();
-                    if (_this.isLoad) {
-                        return;
-                    }
-                    (0, _jquery2.default)('.loaded').parents('.portfolio-content').fadeOut(500, function () {
-                        (0, _jquery2.default)('.loaded').parents('.portfolio-content').remove();
-                    });
-                    _this.init();
-                    (0, _jquery2.default)('.get-back').hide();
-                    (0, _jquery2.default)('.load-more a').text('loadmore');
-                });
-            });
-        });
-    },
-    getImages: function getImages(page, fun) {
-        var _this = this;
-        fun(_this.imgarr.slice((page - 1) * 3, page * 3), _this.titlearr.slice((page - 1) * 3, page * 3), _this.contentarr.slice((page - 1) * 3, page * 3));
-    },
-    getpages: function getpages(page) {
-        if (this.isLoad) {
-            return;
-        }
-        var _this = this;
-        this.getImages(this.page, function (images, titles, contents) {
-            _this.images = images;
-            _this.titles = titles;
-            _this.contents = contents;
-            _this.count = 0;
-            _this.loadNext(_this.count);
-        });
-    },
-    creatImg: function creatImg(n, index) {
-        var htmls = '';
-        htmls += '<div class="portfolio-content">';
-        htmls += '<div class="portfolio-link">';
-        // htmls += '<img class = "loaded" src=' + this.images[n] + '>';
-        htmls += '<div class="portfolio-hover">';
-        htmls += '<div class="portfolio-hover-content">';
-        htmls += '<i class="iconfont icon-icon1"></i>';
-        htmls += '</div></div></div>';
-        htmls += '<div class="portfolio-context">';
-        htmls += '<h4>' + this.titles[n] + '</h4>';
-        htmls += '<p>' + this.contents[n] + '</p>';
-        htmls += '</div></div>';
-        this.$ct.eq(index).append(htmls);
-
-        var $image = (0, _jquery2.default)('<img class="loaded">');
-        var _this = this;
-        $image.attr('src', this.images[n]);
-        this.$ct.eq(index).find('.portfolio-link').last().prepend($image);
-        $image.on('load', function () {
-            _this.columnHeight[index] += $image.parents('.portfolio-content').height();
-            _this.count += 1;
-            _this.loadNext(_this.count);
-        });
-    },
-    loadNext: function loadNext(n) {
-        if (this.images[n]) {
-            var short = this.getShortest(); //找到最短的列
-            this.creatImg(n, short);
-            this.isLoad = true;
-        } else {
-            this.isLoad = false;
-            (0, _jquery2.default)('.load-more a').text('Load More');
-            this.page += 1;
-            if (!this.imgarr[(this.page - 1) * 3]) {
-                (0, _jquery2.default)('.load-more a').text('No More');
-            }
-        } //当该页没有下一张时，isLoad=false
-    },
-    getShortest: function getShortest() {
-        var min = 0;
-        for (var i = 0; i < this.columnHeight.length; i++) {
-            if (this.columnHeight[min] > this.columnHeight[i]) min = i;
-        }
-        // console.log(min)
-        return min;
+        this.$ct = $ct
+        this.init();
+        this.bind();
     }
-};
+    LoadMore.prototype = {
+        init: function () {
+            var _this = this;
+            this.page = 1;
+            this.isLoad = false;
+            var height1 = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#column1').children().last().offset().top+__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#column1').children().last().height()
+            var height2 = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#column2').children().last().offset().top+__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#column1').children().last().height()
+            var height3 = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#column3').children().last().offset().top+__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#column1').children().last().height()
+            this.columnHeight = [height1, height2, height3];
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.get-back').hide()
+        },
+        bind: function () {
+            var _this = this;
+            this.imgarr = [];
+            this.titlearr = [];
+            this.contentarr = [];
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.load-more').one('click', function (e) {
+                e.preventDefault();
+                _this.isLoad = true;
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.load-more a').text('Loading...')
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.get('./loadMore.json').done(function (res) {
+                    for (var i = 0; i < res.url.length; i++) {
+                        _this.imgarr.push(res.url[i])
+                        _this.titlearr.push(res.title[i])
+                        _this.contentarr.push(res.content[i]);
+                    }
+                    _this.isLoad = false;
+                    _this.getpages(_this.page)
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.get-back').fadeIn(500);
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.load-more').on('click', function (e) {
+                        e.preventDefault();
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.get-back').fadeIn(500);
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.load-more a').text('Loading...')
+                        _this.getpages(_this.page)
+                    })
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.get-back').on('click', function (e) {
+                        e.preventDefault();
+                        if (_this.isLoad) { return }
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loaded').parents('.portfolio-content').fadeOut(500,
+                            function () { __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loaded').parents('.portfolio-content').remove() })
+                        _this.init()
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.get-back').hide()
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.load-more a').text('loadmore')
+                    })
+                })
+            })
+        },
+        getImages: function (page, fun) {
+            var _this = this;
+            fun(_this.imgarr.slice((page - 1) * 3, page * 3),
+                _this.titlearr.slice((page - 1) * 3, page * 3),
+                _this.contentarr.slice((page - 1) * 3, page * 3))
+        },
+        getpages: function (page) {
+            if (this.isLoad) { return }
+            var _this = this
+            this.getImages(this.page, function (images, titles, contents) {
+                _this.images = images;
+                _this.titles = titles;
+                _this.contents = contents;
+                _this.count = 0;
+                _this.loadNext(_this.count);
+            })
+        },
+        creatImg: function (n, index) {
+            var htmls = '';
+            htmls += '<div class="portfolio-content">';
+            htmls += '<div class="portfolio-link">';
+            // htmls += '<img class = "loaded" src=' + this.images[n] + '>';
+            htmls += '<div class="portfolio-hover">';
+            htmls += '<div class="portfolio-hover-content">';
+            htmls += '<i class="iconfont icon-icon1"></i>';
+            htmls += '</div></div></div>';
+            htmls += '<div class="portfolio-context">';
+            htmls += '<h4>' + this.titles[n] + '</h4>';
+            htmls += '<p>' + this.contents[n] + '</p>'
+            htmls += '</div></div>'
+            this.$ct.eq(index).append(htmls)
+
+            var $image = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<img class="loaded">')
+            var _this = this
+            $image.attr('src', this.images[n])
+            this.$ct.eq(index).find('.portfolio-link').last().prepend($image)
+            $image.on('load',function () {
+                _this.columnHeight[index] += $image.parents('.portfolio-content').height()
+                _this.count += 1
+                _this.loadNext(_this.count)
+            })
+        },
+        loadNext: function (n) {
+            if (this.images[n]) {
+                var short = this.getShortest()//找到最短的列
+                this.creatImg(n, short)
+                this.isLoad = true
+            } else {
+                this.isLoad = false;
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.load-more a').text('Load More');
+                this.page += 1;
+                if (!this.imgarr[(this.page - 1) * 3]) {
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.load-more a').text('No More')
+                }
+            } //当该页没有下一张时，isLoad=false
+        },
+        getShortest: function () {
+            var min = 0
+            for (var i = 0; i < this.columnHeight.length; i++) {
+                if (this.columnHeight[min] > this.columnHeight[i])
+                    min = i
+            }
+            // console.log(min)
+            return min
+        }
+    }
+
+
 
 /***/ })
 /******/ ]);
